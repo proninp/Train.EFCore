@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Train.EFCore.API.Data.ValueGenerators;
 using Train.EFCore.API.Models;
 
 namespace Train.EFCore.API.Data.EntityMapping;
@@ -12,6 +13,12 @@ public class GenreMapping : IEntityTypeConfiguration<Genre>
         builder.Property(g => g.Name)
             .IsRequired()
             .HasMaxLength(100);
+
+        builder.Property<DateTime>("CreatedDate")
+            // We can access this property in Evaluate Expression windows while debugging:
+            // _context.Entry(genre).Property("CreatedDate").CurrentValue
+            .HasColumnName("CreatedAt")
+            .HasValueGenerator<CreatedDateGenerator>();
             
         builder.HasData(
             new Genre { Id = 1, Name = "Drama" },

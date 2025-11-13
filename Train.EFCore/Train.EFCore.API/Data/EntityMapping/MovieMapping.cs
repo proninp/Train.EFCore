@@ -30,6 +30,13 @@ public class MovieMapping : IEntityTypeConfiguration<Movie>
             .HasColumnType("varchar(max)")
             .HasColumnName("Plot");
 
+        //builder.ComplexProperty(m => m.Director);
+        builder.OwnsOne(m => m.Director)
+            .ToTable("Movie_Directors");
+
+        builder.OwnsMany(m => m.Actors)
+            .ToTable("Movie_Actors");
+
         builder
             .HasOne(m => m.Genre)
             .WithMany(g => g.Movies)
@@ -40,110 +47,45 @@ public class MovieMapping : IEntityTypeConfiguration<Movie>
             new Movie
             {
                 Id = 1,
-                Title = "Shadows of Tomorrow",
-                ReleaseDate = new DateTime(2019, 5, 17),
-                Synopsis = "A scientist struggles with the consequences of a failed time experiment.",
-                AgeRating = AgeRating.Adolescent,
-                MainGenreId = 9 // Science Fiction
+                Title = "Fight Club",
+                ReleaseDate = new DateTime(1999, 10, 15),
+                Synopsis = "An insomniac office worker and a soap maker form an underground fight club.",
+                AgeRating = AgeRating.Adult,
+                MainGenreId = 12 // Crime (ближе всего по смыслу)
+            }
+        );
+        
+        builder.OwnsOne(m => m.Director).HasData(
+            new
+            {
+                MovieId = 1,
+                FirstName = "David",
+                LastName = "Fincher"
+            }
+        );
+        
+        builder.OwnsMany(m => m.Actors).HasData(
+            // Fight Club (MovieId = 1)
+            new
+            {
+                Id = 1,
+                MovieId = 1,
+                FirstName = "Brad",
+                LastName = "Pitt"
             },
-            new Movie
+            new
             {
                 Id = 2,
-                Title = "Laughing in the Rain",
-                ReleaseDate = new DateTime(2014, 3, 8),
-                Synopsis = "A clumsy waiter turns a rainy week into the funniest days of his life.",
-                AgeRating = AgeRating.ElementarySchool,
-                MainGenreId = 2 // Comedy
+                MovieId = 1,
+                FirstName = "Edward",
+                LastName = "Norton"
             },
-            new Movie
+            new
             {
                 Id = 3,
-                Title = "Broken Silence",
-                ReleaseDate = new DateTime(2007, 11, 2),
-                Synopsis = "A family drama about unspoken truths and reconciliation after years apart.",
-                AgeRating = AgeRating.HighSchool,
-                MainGenreId = 1 // Drama
-            },
-            new Movie
-            {
-                Id = 4,
-                Title = "Edge of the City",
-                ReleaseDate = new DateTime(2021, 9, 24),
-                Synopsis = "An undercover cop infiltrates a dangerous crime syndicate at the edge of a megacity.",
-                AgeRating = AgeRating.Adult,
-                MainGenreId = 12 // Crime
-            },
-            new Movie
-            {
-                Id = 5,
-                Title = "Hidden Trail",
-                ReleaseDate = new DateTime(2016, 7, 15),
-                Synopsis = "Two friends embark on a risky mountain hike that turns into a fight for survival.",
-                AgeRating = AgeRating.Adolescent,
-                MainGenreId = 4 // Adventure
-            },
-            new Movie
-            {
-                Id = 6,
-                Title = "Night Whispers",
-                ReleaseDate = new DateTime(2018, 10, 31),
-                Synopsis = "A small town is haunted by eerie voices only heard after midnight.",
-                AgeRating = AgeRating.Adolescent,
-                MainGenreId = 6 // Horror
-            },
-            new Movie
-            {
-                Id = 7,
-                Title = "Hearts Between Pages",
-                ReleaseDate = new DateTime(2013, 2, 14),
-                Synopsis = "A shy librarian and a struggling writer find each other through a lost notebook.",
-                AgeRating = AgeRating.HighSchool,
-                MainGenreId = 7 // Romance
-            },
-            new Movie
-            {
-                Id = 8,
-                Title = "Kingdom of Emberlight",
-                ReleaseDate = new DateTime(2020, 12, 18),
-                Synopsis = "A young mage must protect a kingdom powered by ancient light crystals.",
-                AgeRating = AgeRating.ElementarySchool,
-                MainGenreId = 8 // Fantasy
-            },
-            new Movie
-            {
-                Id = 9,
-                Title = "Lines of Truth",
-                ReleaseDate = new DateTime(2011, 4, 29),
-                Synopsis = "A detective with a photographic memory investigates a tangled web of lies.",
-                AgeRating = AgeRating.Adolescent,
-                MainGenreId = 13 // Mystery
-            },
-            new Movie
-            {
-                Id = 10,
-                Title = "Echoes of the Front",
-                ReleaseDate = new DateTime(2004, 5, 9),
-                Synopsis = "Soldiers on the front line struggle with loyalty, fear, and hope during a brutal war.",
-                AgeRating = AgeRating.Adult,
-                MainGenreId = 16 // War
-            },
-            new Movie
-            {
-                Id = 11,
-                Title = "Racing the Finish Line",
-                ReleaseDate = new DateTime(2017, 6, 3),
-                Synopsis = "A young runner from a small town fights for a chance at the national championship.",
-                AgeRating = AgeRating.ElementarySchool,
-                MainGenreId = 18 // Sport
-            },
-            new Movie
-            {
-                Id = 12,
-                Title = "Worlds in Motion",
-                ReleaseDate = new DateTime(2022, 1, 21),
-                Synopsis = "A documentary about everyday people changing their communities in unexpected ways.",
-                AgeRating = AgeRating.All,
-                MainGenreId = 11 // Documentary
+                MovieId = 1,
+                FirstName = "Helena",
+                LastName = "Bonham Carter"
             }
         );
     }

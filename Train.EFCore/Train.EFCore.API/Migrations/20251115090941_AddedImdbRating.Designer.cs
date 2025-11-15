@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Train.EFCore.API.Data;
 
@@ -11,9 +12,11 @@ using Train.EFCore.API.Data;
 namespace Train.EFCore.API.Migrations
 {
     [DbContext(typeof(MoviesContext))]
-    partial class MoviesContextModelSnapshot : ModelSnapshot
+    [Migration("20251115090941_AddedImdbRating")]
+    partial class AddedImdbRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,8 +150,8 @@ namespace Train.EFCore.API.Migrations
                     b.Property<int>("AgeRating")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("InternetRating")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ImdbRating")
+                        .HasColumnType("int");
 
                     b.Property<int>("MainGenreId")
                         .HasColumnType("int");
@@ -177,7 +180,7 @@ namespace Train.EFCore.API.Migrations
                         {
                             Id = 1,
                             AgeRating = 18,
-                            InternetRating = 0m,
+                            ImdbRating = 0,
                             MainGenreId = 12,
                             ReleaseDate = "19991015",
                             Synopsis = "An insomniac office worker and a soap maker form an underground fight club.",

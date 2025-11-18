@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Train.EFCore.API", "Train.EFCore.API\Train.EFCore.API.csproj", "{494C2974-4934-4AB3-9B02-CC3C6BD323B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Train.EfCore.SimpleAPI", "Train.EfCore.SimpleAPI\Train.EfCore.SimpleAPI.csproj", "{ACCA99A0-31B4-4420-9A50-EBBE0652F0FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Train.EFCore.Tests", "Train.EFCore.Tests\Train.EFCore.Tests.csproj", "{6ECB8520-E514-4C5D-BF23-9DDE9270D90E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{494C2974-4934-4AB3-9B02-CC3C6BD323B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{494C2974-4934-4AB3-9B02-CC3C6BD323B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{494C2974-4934-4AB3-9B02-CC3C6BD323B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACCA99A0-31B4-4420-9A50-EBBE0652F0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACCA99A0-31B4-4420-9A50-EBBE0652F0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACCA99A0-31B4-4420-9A50-EBBE0652F0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACCA99A0-31B4-4420-9A50-EBBE0652F0FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ECB8520-E514-4C5D-BF23-9DDE9270D90E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ECB8520-E514-4C5D-BF23-9DDE9270D90E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ECB8520-E514-4C5D-BF23-9DDE9270D90E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ECB8520-E514-4C5D-BF23-9DDE9270D90E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Train.EFCore.API.Data;
 using Train.EFCore.API.Models;
+using Train.EFCore.API.Repositories;
+using Train.EFCore.API.Services;
 
 namespace Train.EFCore.API.Controllers;
 
@@ -9,70 +11,71 @@ namespace Train.EFCore.API.Controllers;
 [Route("[controller]")]
 public class GenresController : Controller
 {
-    private readonly MoviesContext _context;
+     private readonly IGenreRepository _repository;
+    private readonly IBatchGenreService _batchService;
 
-    public GenresController(MoviesContext context)
+    public GenresController(IGenreRepository repository, IBatchGenreService batchService)
     {
-        _context = context;
+        _repository = repository;
+        _batchService = batchService;
     }
-
+    
     [HttpGet]
-    [ProducesResponseType(typeof(List<Genre>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll(CancellationToken ct)
+    [ProducesResponseType(typeof(IEnumerable<Genre>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(await _context.Genres.ToListAsync(ct));
+        return Ok(await _repository.GetAll());
     }
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(Genre), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get([FromRoute] int id, CancellationToken ct)
+    public async Task<IActionResult> Get([FromRoute] int id)
     {
-        var genre = await _context.FindAsync<Genre>(id, ct);
+        var genre = await _repository.Get(id);
         
-        return genre is null
+        return genre == null
             ? NotFound()
             : Ok(genre);
     }
-
+    
     [HttpPost]
     [ProducesResponseType(typeof(Genre), StatusCodes.Status201Created)]
-    public async Task<IActionResult> Create([FromBody] Genre genre, CancellationToken ct)
+    public async Task<IActionResult> Create([FromBody] Genre genre)
     {
-        await _context.Genres.AddAsync(genre, ct);
-        await _context.SaveChangesAsync(ct);
-        return CreatedAtAction(nameof(Get), new { id = genre.Id }, genre);
-    }
+        var createdGenre = await _repository.Create(genre);
 
+        return CreatedAtAction(nameof(Get), new { id = createdGenre.Id }, createdGenre);
+    }
+    
+    [HttpPost("batch")]
+    [ProducesResponseType(typeof(IEnumerable<Genre>), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateAll([FromBody] List<Genre> genres)
+    {
+        var response = await _batchService.CreateGenres(genres);
+
+        return CreatedAtAction(nameof(GetAll), new{}, response);
+    }
+    
     [HttpPut("{id:int}")]
     [ProducesResponseType(typeof(Genre), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Genre genre, CancellationToken ct)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Genre genre)
     {
-        var existingGenre = await _context.Genres.FindAsync(id, ct);
-        if (existingGenre is null)
-        {
-            return NotFound();
-        }
-        
-        existingGenre.Name = genre.Name;
-        await _context.SaveChangesAsync(ct);
-        return Ok(existingGenre);
-    }
+        var updatedGenre = await _repository.Update(id, genre);
 
+        return updatedGenre is null
+            ? NotFound()
+            : Ok(updatedGenre);
+    }
+    
     [HttpDelete("{id:int}")]
-    [ProducesResponseType(typeof(Genre), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken ct)
+    public async Task<IActionResult> Remove([FromRoute] int id)
     {
-        var existingGenre = await _context.Genres.FindAsync(id, ct);
-        if (existingGenre is null)
-        {
-            return NotFound();
-        }
+        var success = await _repository.Delete(id);
         
-        _context.Genres.Remove(existingGenre);
-        await _context.SaveChangesAsync(ct);
-        return Ok();
+        return success ? Ok() : NotFound();
     }
 }
